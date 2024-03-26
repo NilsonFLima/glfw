@@ -1,8 +1,6 @@
 project "GLFW"
 	kind "StaticLib"
 	language "C"
-	staticruntime "on"
-	warnings "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -19,12 +17,12 @@ project "GLFW"
 		"src/vulkan.c",
 		"src/window.c"
 	}
-
 	filter "system:linux"
 		pic "On"
 
 		systemversion "latest"
-		
+		staticruntime "On"
+
 		files
 		{
 			"src/x11_init.c",
@@ -44,30 +42,9 @@ project "GLFW"
 			"_GLFW_X11"
 		}
 
-	filter "system:macosx"
-		pic "On"
-
-		files
-		{
-			"src/cocoa_init.m",
-			"src/cocoa_monitor.m",
-			"src/cocoa_window.m",
-			"src/cocoa_joystick.m",
-			"src/cocoa_time.c",
-			"src/nsgl_context.m",
-			"src/posix_thread.c",
-			"src/posix_module.c",
-			"src/osmesa_context.c",
-			"src/egl_context.c"
-		}
-
-		defines
-		{
-			"_GLFW_COCOA"
-		}
-
 	filter "system:windows"
 		systemversion "latest"
+		staticruntime "On"
 
 		files
 		{
@@ -90,24 +67,8 @@ project "GLFW"
 
 	filter "configurations:Debug"
 		runtime "Debug"
-		buildoptions "/MDd"
- 	  symbols "on"
-
-	filter { "system:windows", "configurations:Debug-AS" }	
-		runtime "Debug"
-		buildoptions "/MDd"
 		symbols "on"
-		--sanitize { "Address" }
-		flags { "NoRuntimeChecks", "NoIncrementalLink" }
 
 	filter "configurations:Release"
 		runtime "Release"
-		buildoptions "/MD"
-		optimize "speed"
-    symbols "off"
-
-    filter "configurations:Dist"
-		runtime "Release"
-		buildoptions "/MD"
-		optimize "speed"
-    symbols "off"
+		optimize "on"
